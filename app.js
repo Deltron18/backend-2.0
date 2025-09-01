@@ -18,6 +18,18 @@ app.get('/read', async (req, res) => {
   res.render('read', { users: alluser });
 });
 
+app.get('/edit/:id', async (req, res) => {
+  let user = await userModel.findOne({ _id: req.params.id });
+  res.render('edit', { user });
+});
+
+app.post('/update/:id', async (req, res) => {
+  let { name, image, email } = req.body;
+  let user = await userModel.findOneAndUpdate({ _id: req.params.id }, { name, image, email }, { new: true });
+  res.redirect('/read');
+});
+
+
 app.get('/delete/:id', async (req, res) => { 
   let alluser = await userModel.findOneAndDelete({ _id: req.params.id });
   res.redirect('/read');
